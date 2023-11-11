@@ -14,9 +14,7 @@ const Main = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(`${host}:${port}/products`);
-  
         const jsonData = await response.json();
-  
         // console.log(jsonData);
         setData(jsonData);
       } catch (error) {

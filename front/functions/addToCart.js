@@ -10,7 +10,7 @@ const addToCart = async (id) => {
         }
         console.log("request data :",dataToSend);
         
-        const url = 'http://localhost:3000/cart/addcart'
+        const url = 'http://localhost:3000/addcart'
         console.log("request url:",url);
         
         const response = await fetch(url , {
@@ -27,6 +27,9 @@ const addToCart = async (id) => {
         let data = await response.json();
         alert("Item added to cart");
         console.log(data);
+        // Ajoutez l'article au panier
+        // setCartItems((prevItems) => [...prevItems, data]);
+        
       } catch (err) {
         alert(`Error: ${err.message}`);
         console.log(err);

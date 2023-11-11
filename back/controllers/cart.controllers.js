@@ -23,10 +23,51 @@ const addToCart = ((req, res, next) =>{
   });
 })
 
+const getCartDetails = (req, res, next) => {
+  const query = `
+    SELECT cart.id, cart.quantity, products.id AS productId, products.name AS name, products.price AS price
+    FROM cart
+    JOIN products ON cart.productId = products.id;
+  `;
+
+  connect.query(query, (error, results) => {
+    if (error) {
+      console.error("Erreur nulle", error);
+      res.status(500).send("Erreur lors de la récupération des détails du panier");
+    } else {
+      console.log("detail ok");
+      res.status(200).send(results);
+    }
+  });
+};
+
+const removeFromCart = async (req, res, next) => {
+  const cartId = req.params.id;
+console.log(cartId);
+  try {
+    const query = "DELETE FROM cart WHERE id = ?";
+    const values = [cartId];
+
+    connect.query(query, values, (error, results) => {
+      if (error) {
+        console.error("Erreur lors de la suppression de l'article du panier", error);
+        res.status(500).json("Erreur lors de la suppression de l'article du panier");
+      } else {
+        res.status(200).json("Article supprimé du panier avec succès");
+      }
+    });
+  } catch (error) {
+    console.error("Erreur lors de la suppression de l'article du panier", error);
+    res.status(500).json("Erreur lors de la suppression de l'article du panier");
+  }
+};
 
 
 
-module.exports = {addToCart}
+
+
+
+module.exports = {addToCart, getCartDetails, removeFromCart}
 
 
 

@@ -7,7 +7,7 @@ import Typography from '@mui/joy/Typography';
 import { adaptV4Theme } from '@mui/material';
 import {BsFillHeartFill} from "react-icons/bs"
 // import { useNavigate } from 'react-router';
-import addToCart from '../../fonctions/addToCart';
+import addToCart from '../../functions/addToCart';
 
 
 const Cards = ({datas}) => {

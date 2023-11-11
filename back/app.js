@@ -18,6 +18,6 @@ app.use((req, res, next) => {
 
 
 app.use('/',home)
-app.use('/cart',cart)
+app.use('/',cart)
 
 module.exports = app
