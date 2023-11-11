@@ -8,15 +8,20 @@ import { adaptV4Theme } from '@mui/material';
 import {BsFillHeartFill} from "react-icons/bs"
 // import { useNavigate } from 'react-router';
 import addToCart from '../../functions/addToCart';
-
+import { cartItemContext } from '../App';
 
 const Cards = ({datas}) => {
+  const { setCartItems } = useContext(cartItemContext);
+  const [id, setId] = useState(null);
 
+  const handleAddToCart = () => {
+    setId(datas.id);  // Mettez à jour l'ID dans le state
 
+    context(datas.id); // Transmettez l'ID à context
+    addToCart(datas.id); // Appelez addToCart avec l'ID
+    setCartItems(/* mettez à jour le panier si nécessaire */);
 
-
-
-
+};
 
   return ( 
       <Card 
@@ -53,7 +58,7 @@ const Cards = ({datas}) => {
             color="Neutral"
             aria-label={datas.Title}
             sx={{ ml: 'auto', alignSelf: 'center', fontWeight: 600 }}
-            onClick={()=> addToCart(datas.id)}
+            onClick={handleAddToCart}
           >
             Acheter au panier
           </Button>

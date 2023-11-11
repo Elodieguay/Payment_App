@@ -4,7 +4,8 @@ const port=import.meta.env.VITE_PORT;
 const host=import.meta.env.VITE_HOST;
 
 const Main = () => {
-
+ 
+      
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -17,6 +18,7 @@ const Main = () => {
         const jsonData = await response.json();
         // console.log(jsonData);
         setData(jsonData);
+        
       } catch (error) {
         console.log("Error:", error);
       }

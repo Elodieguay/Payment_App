@@ -60,14 +60,32 @@ console.log(cartId);
     console.error("Erreur lors de la suppression de l'article du panier", error);
     res.status(500).json("Erreur lors de la suppression de l'article du panier");
   }
+
+  
+};
+
+const updateQuantity = (req, res, next) => {
+  const itemId = req.params.itemId;
+  const newQuantity = req.body.newQuantity;
+
+  // Votre logique de validation de la nouvelle quantité
+  // Assurez-vous que la nouvelle quantité est valide, par exemple, elle n'est pas négative.
+
+  const updateQuantityQuery = 'UPDATE cart SET quantity = ? WHERE id = ?';
+  connect.query(updateQuantityQuery, [newQuantity, itemId], (error, updateResults) => {
+    if (error) {
+      console.error('Erreur lors de la mise à jour de la quantité dans le panier', error);
+      res.status(500).send("Erreur lors de la mise à jour de la quantité dans le panier.");
+    } else {
+      res.status(200).send("Quantité dans le panier mise à jour avec succès.");
+    }
+  });
 };
 
 
 
 
-
-
-module.exports = {addToCart, getCartDetails, removeFromCart}
+module.exports = {addToCart, getCartDetails, removeFromCart, updateQuantity}
 
 
 

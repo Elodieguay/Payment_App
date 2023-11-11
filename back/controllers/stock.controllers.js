@@ -1,29 +1,25 @@
 const connect = require('../sql/connexion');
 
-const productStock = (req, res, next) => {
-  const productId = req.params.id;
-  const quantity = req.body.quantity; // Assurez-vous d'avoir la quantité souhaitée du produit
+const getStock = (req, res, next) => {
+  const productId = req.params.itemId;
+  console.log(productId);
 
-  const checkStockQuery = 'SELECT id, name, price, inventory FROM products WHERE id = ?';
-  connect.query(checkStockQuery, [productId], (error, productResults) => {
+  const getStockQuery = 'SELECT inventory FROM products WHERE id = ?';
+  
+  connect.query(getStockQuery, [productId], (error, stockResults) => {
     if (error) {
-      console.error('Erreur lors de la récupération du produit', error);
-      res.status(500).send('Erreur lors de la récupération du produit.');
+      console.error('Erreur lors de la récupération du stock', error);
+      res.status(500).send("Erreur lors de la récupération du stock.");
     } else {
-      if (productResults.length === 0) {
+      if (stockResults.length === 0) {
         res.status(404).send('Produit non trouvé.');
       } else {
-        const product = productResults[0];
-
-        if (product.inventory < quantity) {
-          res.status(400).send('Quantité en stock insuffisante.');
-        } else {
-          // Si le stock est suffisant, vous pouvez renvoyer une réponse 200 OK
-          res.status(200).send('Le produit est disponible en stock.');
-        }
+        const stock = stockResults[0].inventory;
+        res.status(200).json({ stock });
       }
     }
   });
 };
 
-module.exports = { productStock };
+module.exports = { getStock };
+

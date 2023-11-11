@@ -1,39 +1,48 @@
+import checkStockAndUpdateQuantity from './checkStockAndUpdateQuantity';
+import checkStockAndAddToCart from './checkStockAndAddToCart';
+import updateQuantityInCart from './updateQuantityInCart';
+import { cartItemContext } from '../src/App';
+import { context } from './createContext';
 
-const port=import.meta.env.VITE_PORT;
-const host=import.meta.env.VITE_HOST;
+const addToCart = async (itemId) => {
+   
 
-const addToCart = async (id) => {
-    try {   
+    const {cartItems} = useContext(cartItemContext);
+    const {setCartItems} = useContext(cartItemContext);
+   
+    try {
+        console.log("je suis dans addtocart");
+        const stockData = await checkStockAndUpdateQuantity(itemId);
+        
+        const availableStock = stockData.stock;
+        
+        const existingCartItem = cartItems.find((item) => item.id === itemId);
+        console.log("existingCartItem:",existingCartItem);
+        if (existingCartItem) {
+            const newQuantity = existingCartItem.quantity + 1;
 
-        const dataToSend = {
-            productId: id, 
+            if (newQuantity > availableStock) {
+                alert("La quantité dépasse le stock disponible.");
+                return;
+            }
+
+            await updateQuantityInCart(itemId, newQuantity);
+            
+            setCartItems((prevCartItems) =>
+                prevCartItems.map((item) =>
+                    item.id === itemId ? { ...item, quantity: newQuantity } : item
+                    )
+                );
+           
+            
+        } else {
+            await checkStockAndAddToCart(itemId, 1, availableStock);
         }
-        console.log("request data :",dataToSend);
-        
-        const url = 'http://localhost:3000/addcart'
-        console.log("request url:",url);
-        
-        const response = await fetch(url , {
-            method: "POST",
-            body: JSON.stringify(dataToSend),
-            headers: { "Content-type": "application/json" },
-            });
-        console.log("request response:",response);
-        
-        if(!response.ok){
-            throw new Error(`HTTP error! Status: ${response.status}`)
-        }
 
-        let data = await response.json();
-        alert("Item added to cart");
-        console.log(data);
-        // Ajoutez l'article au panier
-        // setCartItems((prevItems) => [...prevItems, data]);
-        
-      } catch (err) {
-        alert(`Error: ${err.message}`);
-        console.log(err);
-      }
+        context(itemId);
+    } catch (error) {
+        console.log("Erreur lors de l'ajout au panier :", error);
+    }
 };
 
-export default addToCart
+export default addToCart();

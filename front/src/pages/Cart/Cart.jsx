@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react'
+import Button from '@mui/joy/Button';
+import addToCart from '../../../functions/addToCart';
 import deleteToCart from '../../../functions/deleteToCart';
 import{RxCross1} from "react-icons/rx"
+
 const port=import.meta.env.VITE_PORT;
 const host=import.meta.env.VITE_HOST;
 
 const Cart = () => {
  
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useCart();
+  const [quantities, setQuantities] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -17,15 +21,26 @@ const Cart = () => {
       const response = await fetch(`${host}:${port}/details`);
       console.log("request cart:", response);
       const jsonData = await response.json();
-
       console.log("request cart:",jsonData);
+      
+      const initialQuantities = {};
+      jsonData.forEach((item) => {
+        initialQuantities[item.id] = item.quantity;
+      });
+      setQuantities(initialQuantities);
+
       setCartItems(jsonData);
       console.log("json:",setCartItems);
     } catch (error) {
       console.log("Error pas cool:", error);
     }
   };
-
+  const updateQuantity = (itemId, newQuantity) => {
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [itemId]: newQuantity,
+    }));
+  };
 
   return (
     <section>
@@ -43,7 +58,32 @@ const Cart = () => {
                     <div>
                       <h3 className="text-base  text-gray-900">{item.name}</h3>
                     </div>
+                    <Button
+                        size="small"
+                        // disableElevation
+                        variant="contained"
+                        onClick={() => {
+                          const newQuantity = Math.max(0, quantities[item.id] - 1);
+                          updateQuantity(item.id, newQuantity);
+                        }}
+                      >
+                        -
+                      </Button>
+                      <p>{item.quantity}</p>
+                      <Button
+                        size="small"
+                        // disableElevation
+                        variant="contained"
+                        onClick={() => {
+                          const newQuantity = quantities[item.id] + 1;
+                          updateQuantity(item.id, newQuantity);
+                        }}
+
+                      >
+                        +
+                      </Button>
                     <div className="flex flex-1 items-center justify-end gap-2 font-medium text-base">
+                      <p></p>
                       <p>{item.price}€</p>
                       <p className='flex items-center'>
                       <RxCross1 className="text-gray-600 transition hover:text-red-600"
@@ -76,16 +116,6 @@ const Cart = () => {
                   </div>
                 </dl>
 
-
-
-                {/* <div className="flex flex-col items-center justify-end">
-                  <button
-                  className="block rounded bg-[#7AB8BF] px-5 py-3 text-sm text-white transition hover:bg-gray-600"
-                  onClick={confirmPanier}> Payer en boutique</button>
-                  <Modal showModal={showModal} setShowModal = {setShowModal} />
-                  
-                  
-                </div> */}
               </div>
             </div>
           </div>
