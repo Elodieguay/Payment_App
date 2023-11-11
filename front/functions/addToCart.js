@@ -5,9 +5,34 @@ const host=import.meta.env.VITE_HOST;
 const addToCart = async (id) => {
     try {   
 
-        const dataToSend = {
-            productId: id, 
-        }
+        // Vérification de l'article dans la table cart
+        const response = await fetch(`${host}:${port}/checkcart`);
+        const cartData = await response.json();
+        console.log("cartData:", cartData);
+        
+        // Vérification si l'article est déjà dans la table cart
+        const existingItem = cartData.find(item => item.id === id);
+        console.log("existingItem:", existingItem);
+        
+        if (existingItem) {
+            
+            // Mise à jour de la quantité dans la table cart
+            const url = `http://localhost:3000/updatequantity/${existingItem.id}?type=inc`;
+            await fetch(url, {
+                method: 'PUT',
+            });
+            
+            setCartItems(prevItems => prevItems.map(item => item.id === id ? { ...item, quantity: item.quantity + 1 } : item));
+        
+            console.log("setCartItems:", setCartItems);
+        
+        } else {
+            // Sinon, ajoutez l'article au panier
+            const dataToSend = {
+                productId: id,
+            };
+
+       
         console.log("request data :",dataToSend);
         
         const url = 'http://localhost:3000/addcart'
@@ -27,9 +52,8 @@ const addToCart = async (id) => {
         let data = await response.json();
         alert("Item added to cart");
         console.log(data);
-        // Ajoutez l'article au panier
-        // setCartItems((prevItems) => [...prevItems, data]);
         
+        }
       } catch (err) {
         alert(`Error: ${err.message}`);
         console.log(err);

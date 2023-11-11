@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import {IoIosRemove, IoIosAdd} from "react-icons/io"
 import deleteToCart from '../../../functions/deleteToCart';
 import{RxCross1} from "react-icons/rx"
 const port=import.meta.env.VITE_PORT;
@@ -7,7 +8,9 @@ const host=import.meta.env.VITE_HOST;
 const Cart = () => {
  
   const [cartItems, setCartItems] = useState([]);
-
+  const [quantity, setQuantity] = useState(cartItems.id);
+  console.log(setQuantity);
+  
   useEffect(() => {
     fetchData();
   }, []);
@@ -26,7 +29,41 @@ const Cart = () => {
     }
   };
 
+  const handleQuantity = async(type,itemId) => {
+    console.log("je suis dans handlequantity");
+    
+    setCartItems((prevItems) =>
+    prevItems.map((item) =>
+      item.id === itemId
+        ? {
+            ...item,
+            quantity:
+              type === 'dec' ? item.quantity - 1 : item.quantity + 1,
+            price:
+              type === 'dec'
+                ? item.price - (item.quantity * item.price) 
+                : item.price + (item.quantity * item.price),
+          }
+        : item
+    )
+  );
+    
+      console.log("cart de setCartItem:", setCartItems );
+    // mise à jour de la quantité dans la base de données
 
+    const url = `http://localhost:3000/updatequantity/${itemId}?type=${type}`;
+    
+    console.log("handleQuantityID:",itemId);
+     const response = await fetch(url, {
+        method: 'PUT',
+      });
+      const jsonData = await response.json();
+      console.log(jsonData);
+    
+    
+  };
+
+  
   return (
     <section>
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -39,12 +76,16 @@ const Cart = () => {
               <div key={item.id} className="mt-8 border-t border-gray-400 pt-8">
                 <ul className="space-y-4">
                   <li className="flex items-center gap-4">
-                  
                     <div>
                       <h3 className="text-base  text-gray-900">{item.name}</h3>
                     </div>
+                    <div className='flex items-center'>
+                      <IoIosRemove onClick={() => handleQuantity("dec", item.id)}/> 
+                      <p>{item.quantity}</p>
+                      <IoIosAdd onClick={() => handleQuantity("inc", item.id)}/>
+                    </div>
                     <div className="flex flex-1 items-center justify-end gap-2 font-medium text-base">
-                      <p>{item.price}€</p>
+                      <p>{item.price } {console.log("price:",item.price)}€</p>
                       <p className='flex items-center'>
                       <RxCross1 className="text-gray-600 transition hover:text-red-600"
                       onClick={() => deleteToCart(item.id)}
@@ -59,10 +100,10 @@ const Cart = () => {
                 <dl className="space-y-0.5 text-sm text-gray-700">
                   <div className="flex justify-between">
                     <dt>Sous-total</dt>
-                    {/* <dd>{subtotals}€</dd> */}
+                    <dd>€</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt>Taxes incluses</dt>
+                    <dt>dontTaxes incluses</dt>
                     <dd>20%</dd>
                   </div>
                   {/* <div class="flex justify-between">

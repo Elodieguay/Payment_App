@@ -13,11 +13,6 @@ import addToCart from '../../functions/addToCart';
 const Cards = ({datas}) => {
 
 
-
-
-
-
-
   return ( 
       <Card 
         sx={{ width: 300, height:150 }}

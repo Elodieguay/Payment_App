@@ -62,12 +62,54 @@ console.log(cartId);
   }
 };
 
+const updateQuantity = (req, res, next) => {
+  const cartId = req.params.id;
+  console.log("cartId:",cartId);
+  const updateType = req.query.type; // 'inc' ou 'dec'
+  console.log("updateType:" ,updateType);
+  
+  // Vérifiez si le type de mise à jour est valide
+  if (updateType !== 'inc' && updateType !== 'dec') {
+    return res.status(400).json({ error: 'Type de mise à jour invalide' });
+  }
+
+  // Définissez la quantité à ajouter ou soustraire en fonction du type
+  const quantityUpdate = updateType === 'inc' ? 1 : -1;
+  console.log("quantituupdate:", quantityUpdate);
+
+  const query = 'UPDATE cart SET quantity = quantity + ? WHERE id = ?';
+  const values = [quantityUpdate, cartId];
+
+  connect.query(query, values, (error, results) => {
+      if (error) {
+          console.error('Erreur lors de la mise à jour de la quantité', error);
+          res.status(500).json("Erreur lors de la mise à jour de la quantité");
+      } else {
+          res.status(200).json("Quantité mise à jour avec succès");
+      }
+  });
+};
+
+const getCheckCart = (req, res, next) => {
+  const query = `
+    SELECT cart.id, cart.quantity, products.id AS productId, products.name AS name, products.price AS price
+    FROM cart
+    JOIN products ON cart.productId = products.id;
+  `;
+
+  connect.query(query, (error, results) => {
+    if (error) {
+      console.error("Erreur lors de la récupération des détails du panier", error);
+      res.status(500).send("Erreur lors de la récupération des détails du panier");
+    } else {
+      console.log("Détails du panier récupérés avec succès");
+      res.status(200).send(results);
+    }
+  });
+};
 
 
-
-
-
-module.exports = {addToCart, getCartDetails, removeFromCart}
+module.exports = {addToCart, getCartDetails, removeFromCart, updateQuantity, getCheckCart}
 
 
 
