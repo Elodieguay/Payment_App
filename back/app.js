@@ -1,9 +1,13 @@
 const express=require('express')
 const app = express()
-// const router = require('./routes/users.routes.js')
+const cors = require('cors');
+// const bodyParser = require('body-parser');
 const home = require('./routes/home.routes.js')
-// const produit = require('./routes/produit.routes.js')
-// const admin = require('./routes/admin.routes.js')
+const cart = require('./routes/cart.routes.js')
+
+app.use(cors());
+// app.use(bodyParser.json());
+app.use(express.json())
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,21 +16,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use("/", express.static("../front/dist/"))
-// app.use("/images", express.static("./Assets/img_meubles/"))
-// app.use("/", express.static("../"))
-// app.use("/", express.static("../front/dist/"))
-// app.use("/inscription", express.static("./client/inscription.html")); 
 
-app.use(express.json())
-
-// app.use('/',router)
 app.use('/',home)
-// app.use('/',produit)
-// app.use('/', admin)
-
-
-
-
+app.use('/cart',cart)
 
 module.exports = app

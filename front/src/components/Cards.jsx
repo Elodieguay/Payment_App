@@ -4,7 +4,10 @@ import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import IconButton from '@mui/joy/IconButton';
 import Typography from '@mui/joy/Typography';
+import { adaptV4Theme } from '@mui/material';
 import {BsFillHeartFill} from "react-icons/bs"
+// import { useNavigate } from 'react-router';
+import addToCart from '../../fonctions/addToCart';
 
 
 const Cards = ({datas}) => {
@@ -13,10 +16,11 @@ const Cards = ({datas}) => {
 
 
 
+
+
   return ( 
       <Card 
         sx={{ width: 300, height:150 }}
-
         >
         <div>
           <Typography level="title-lg">{datas.name}</Typography>
@@ -49,8 +53,9 @@ const Cards = ({datas}) => {
             color="Neutral"
             aria-label={datas.Title}
             sx={{ ml: 'auto', alignSelf: 'center', fontWeight: 600 }}
+            onClick={()=> addToCart(datas.id)}
           >
-            Acheter
+            Acheter au panier
           </Button>
         </CardContent>
       </Card>
