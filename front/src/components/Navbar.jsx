@@ -11,19 +11,19 @@ const Navbar = () =>{
 
   
   return (
-    <div className='flex justify-between pt-6 px-10  text-center'>
+    <div className='sm:flex justify-between pt-6 px-10  text-center'>
         <div className='  '>
-            <Link to="/home" className='text-[#025159]  font-semibold text-3xl '>The Bradery</Link>
+            <Link to="/" className='text-[#025159]  font-semibold text-3xl '>The Bradery</Link>
         </div>
-        <ul className=' flex  justify-between   items-center space-x-10  font-semibold'>
-          <li id='prêt à porter' onClick={() => setSelectedCategory('prêt à porter')}>Prêt à Porter</li>
+        <ul className=' flex  justify-between max-sm:text-sm max-sm:pt-5 items-center space-x-10  font-semibold '>
+          <li id='prêt à porter'className=' ' onClick={() => setSelectedCategory('prêt à porter')}>Prêt à Porter</li>
           <li id='accessoires' onClick={() => setSelectedCategory('accessoires')}>Accessoires</li>
           <li id='chaussures' onClick={() => setSelectedCategory('chaussures')}>Chaussures</li>
         </ul>   
         <div className='flex-3 mr-2.5 '>
-        {/* <Link to="/cart"> */}
+        <Link to="/cart">
                 <PiShoppingBagThin size={40} color='black' />
-        {/* </Link> */}
+        </Link>
         </div>
     </div>
   );

@@ -38,7 +38,7 @@ const Cards = ({datas}) => {
           >
           <BsFillHeartFill 
             size={18} 
-            color='pink' 
+            color='#F28585' 
           />
             
           </IconButton>
