@@ -4,15 +4,59 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { useLocation } from 'react-router';
 
-export default function Payment() {
+export default function Payment({addressData}) {
+
+  const location = useLocation()
+  const orderSummary = location?.state?.orderSummary || {};
+  const { items, itemCount, total } = orderSummary;
+  console.log({itemCount, total});
+  
+  // const adressFormSubmit = location?.state.adressFormSubmit || {};
+  // console.log(adressFormSubmit);
+  const formData = addressData.length > 0 ? addressData[0] : {}
+  
+  console.log({formData});
   return (
     <>
     <section className='px-10'>
       <Typography variant="h6" gutterBottom>
         Paiement
       </Typography>      
-      <div>récapitulatif de la commande</div>
+      <div >récapitulatif de la commande:
+        <div className='sm:text-sm text-xs'>
+      {items && items.length > 0 ? (
+            <>
+              {items.map((el) => (
+                <p key={el.id}>{el.quantity}{el.name}</p>
+              ))}
+            </>
+          ) : (
+            <p>Aucun article dans la commande.</p>
+          )}
+        <p className=''>Nombre d'articles: {itemCount} </p>
+        <p>Total global: {total}€</p>
+      </div>
+      </div>
+      <div>
+        ADDRESS SUMMARY
+        <div>
+            <div>
+            {formData ? (
+              <ul>
+                <li>{formData.firstName} {formData.lastName}</li>
+                <li>{formData.adress}</li>
+                <li>{formData.city}{formData.zip}</li>
+                <li>{formData.state}{formData.country}</li> 
+              </ul>          
+            ) : (          
+              <p>En attente de votre adresse de livraison</p>
+            )}
+            </div>          
+          <p></p>
+        </div>
+      </div>
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
