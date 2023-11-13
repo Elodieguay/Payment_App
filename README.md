@@ -7,8 +7,8 @@ Create a payment App for ecommerce in 5 days
 <p>
   <a href="#about">About the project</a> &nbsp;&bull;&nbsp;
   <a href="#getting_started">Getting Started</a> &nbsp;&bull;&nbsp;
-  <a href="#usage">What I succeed</a> &nbsp;&bull;&nbsp;
-  <a href="#hosting">Need more time</a> &nbsp;&bull;&nbsp;
+  <a href="#done">What I succeed</a> &nbsp;&bull;&nbsp;
+  <a href="#more">Need more time</a> &nbsp;&bull;&nbsp;
 </p>
 
 </div>
@@ -32,32 +32,34 @@ After placing an order, an entry must be created in the database with the total 
 <br>
 
 Build with : REACT.JS - TAILWIND - NODE.JS - EXPRESS - MYSQL
+</div>
 
 ****
----
 <!-- GETTING STARTED -->
 <div id="getting_started">
 
 ## 🛠 Getting Started
 <br>
-Clone down this repository.
+<p>
+Clone down this repository.</p>
 
 <div id="prerequisites">
 
 ### Prerequisites:
+<p>
 You will need `node` and `npm` installed globally on your machine.
-You will need a mySQL account ( I used PhpMyAdmin for mySQL interface).
+You will need a mySQL account ( I used PhpMyAdmin for mySQL interface).</p>
 </div>
 
 <div id="installation">
-
+****
 ### Installation:
 
 After clone the repository:
 1) Insert the data base in your mySQL interface
 2) Do `npm install` for the front and the back
 3) Install the .env file in front and back in order to have access to the "HOST" and "PORT" . <br>
-Put the variable of you have on localhost, server, and SQL authentification.<br>
+Put the variable : localhost, server, and SQL authentification.<br><br>
 IMPORTANT: You will need:<br>
 For the Back : PORT, DDB PASSWORD, PORT_BDD , HOST ( it's generally 'http://localhost')<br>
 For the Front : VITE_PORT, VITE_HOST = 'http://localhost'<br>
@@ -67,11 +69,10 @@ cp .env.example .env
 4) Run the Back with `nodemon ` and run the Front with ` npm run dev `
 5) Click on the url to access to the project
 </div>
-</div>
----
 
-<!-- USAGE -->
-<div id="usage">
+****
+<!-- DONE -->
+<div id="done">
 
 ## 👩‍💻 What I did
 <br>
@@ -83,8 +84,8 @@ cp .env.example .env
 </div>
 
 ----
-<!-- HOSTING -->
-<div id="hosting">
+<!-- MORE -->
+<div id="more">
 
 ## 👩‍💻 What I did not do
 <br>
@@ -93,3 +94,4 @@ cp .env.example .env
 2) I do have no time to create filter in order to search articles
 3) I do not create user authentification
 4) I will want to create a modal to thanks user for the order
+</div>
