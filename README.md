@@ -56,7 +56,7 @@ You will need a mySQL account ( I used PhpMyAdmin for mySQL interface).</p>
 ### Installation:
 
 After clone the repository:
-1) Insert the data base in your mySQL interface
+1) Insert the data base in your mySQL interface. The file is in SQL file in the Back structure (choose between text file or SQL file)
 2) Do `npm install` for the front and the back
 3) Install the .env file in front and back in order to have access to the "HOST" and "PORT" . <br>
 Put the variable : localhost, server, and SQL authentification.<br><br>
