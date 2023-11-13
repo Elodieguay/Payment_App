@@ -96,7 +96,7 @@ const getCheckCart = (req, res, next) => {
       console.error("Erreur lors de la récupération des détails du panier", error);
       res.status(500).send("Erreur lors de la récupération des détails du panier");
     } else {
-      console.log("Détails du panier récupérés avec succès");
+      // console.log("Détails du panier récupérés avec succès");
       res.status(200).send(results);
     }
   });

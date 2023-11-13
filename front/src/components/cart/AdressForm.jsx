@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -17,8 +17,17 @@ export default function AddressForm({adressFormSubmit}) {
     state: '',
     zip: '',
     country: '',
-  }
- )
+  })
+ 
+
+  const [formValid, setformValid] = useState(false);
+
+  useEffect(()=>{
+    const fieldsRequired = ['firstName', 'lastName', 'address', 'city', 'zip', 'country']
+    const formValid = fieldsRequired.every((field) => formData[field].trim() !== '')
+    setformValid(formValid)
+  },[formData])
+
 
   const changeInput = (event) =>{
     const { name, value } = event.target;
@@ -135,7 +144,9 @@ export default function AddressForm({adressFormSubmit}) {
         <Button 
         onClick={formSubmitPayment}
         textButton='Enregistrer' 
-        classbutton='block rounded bg-[#F28585] w-full px-5 py-3 sm:text-lg mx-6 text-white transition hover:bg-gray-600 mt-4 text-center' />
+        classbutton={`block rounded bg-[#F28585] w-full px-5 py-3 sm:text-lg mx-6 text-white transition hover:bg-gray-600 mt-4 text-center ${
+          formValid ? '' : 'pointer-events-none opacity-50'
+        }`} />
         <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox color="secondary" name="saveAddress" value="yes" />}

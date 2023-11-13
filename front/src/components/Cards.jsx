@@ -1,4 +1,3 @@
-import AspectRatio from '@mui/joy/AspectRatio';
 import Button from '@mui/joy/Button';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
@@ -19,13 +18,6 @@ const Cards = ({datas}) => {
           <Typography level="title-lg">{datas.name}</Typography>
           <Typography level="body-sm">{datas.price}</Typography>
         </div>
-        {/* <AspectRatio  ratio="4/4">
-          <img
-            src={datas.photo}
-            loading="lazy"
-            alt="film"
-          />
-        </AspectRatio>  */}
         <CardContent orientation="horizontal">  
           <IconButton
             aria-label="heart"

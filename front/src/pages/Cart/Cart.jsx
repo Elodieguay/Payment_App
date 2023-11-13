@@ -13,7 +13,6 @@ const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [quantity, setQuantity] = useState(cartItems.id);
-  console.log(setQuantity);
 
   useEffect(() => {
     fetchData();
@@ -22,19 +21,15 @@ const Cart = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(`${host}:${port}/details`);
-      console.log("request cart:", response);
       const jsonData = await response.json();
-
-      console.log("request cart:",jsonData);
+      // console.log("request cart:",jsonData);
       setCartItems(jsonData);
-      console.log("json:",setCartItems);
     } catch (error) {
       console.log("Error pas cool:", error);
     }
   };
 
   const handleQuantity = async(type,itemId) => {
-    console.log("je suis dans handlequantity");
     
     setCartItems((prevItems) =>
     prevItems.map((item) =>
@@ -52,19 +47,15 @@ const Cart = () => {
     )
   );
     
-      console.log("cart de setCartItem:", setCartItems );
-    // mise à jour de la quantité dans la base de données
+// mise à jour de la quantité dans la base de données
 
-    const url = `${host}:${port}/updatequantity/${itemId}?type=${type}`;
-    
-    console.log("handleQuantityID:",itemId);
-     const response = await fetch(url, {
-        method: 'PUT',
-      });
-      const jsonData = await response.json();
-      console.log(jsonData);
-    
-    
+  const url = `${host}:${port}/updatequantity/${itemId}?type=${type}`;
+    const response = await fetch(url, {
+      method: 'PUT',
+    });
+    const jsonData = await response.json();
+    // console.log(jsonData);
+ 
   };
 
   const calculateTotal = () => {
@@ -82,7 +73,7 @@ const Cart = () => {
   const handleCheckout = () => {
     const checkoutData = {items: cartItems, itemCount: cartItems.length, total: calculateTotal()};
     navigate('/checkout', { state: { orderSummary : checkoutData}});
-    console.log("handlecheckout:", checkoutData);
+    // console.log("handlecheckout:", checkoutData);
   };
   
   return (
@@ -124,46 +115,4 @@ const Cart = () => {
 
 export default Cart 
 
- {/* <button
-                  className="block rounded bg-[#7AB8BF] w-full px-5 py-3 text-lg text-white transition hover:bg-gray-600"
-                  onClick={handleCheckout}
-                  > Payer </button>   */}
-
-
-// const location=useLocation()
-//   console.log(location)
-//   // const product= location.state?.product
-//   // console.log({product.id})
-
-
-//   const [productCart, setProductCart] = useState({});
-
-//   useEffect(() => {
-    
-
-//       fetchData();
-//   }, []);
-  
-//   const fetchData = async () => {
-
-//   try {
-//     const response = await fetch(`http://localhost:${port}/products/${product.id}`);
-//     const jsonData = await response.json();
-
-//     console.log(jsonData);
-//     setProductCart(jsonData);
-
-//   } catch (error) {
-//     console.log("Error:", error);
-//   }
-// };
-//   // Fonction pour supprimer un article du panier
-// const removeFromCart = (productId) => {
-//   const updatedCart = cart.filter((item) => item.id !== productId);
-//   setCart(updatedCart);
-// };
-
-// // Fonction pour vider le panier
-// const clearCart = () => {
-//   setCart([]);
-// };
+ 

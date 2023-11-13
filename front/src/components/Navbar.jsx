@@ -1,13 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {PiShoppingBagThin} from 'react-icons/pi'
 
+const port=import.meta.env.VITE_PORT;
+const host=import.meta.env.VITE_HOST;
 
 
 const Navbar = () =>{
 
+  // Gestion de la fonctionnalité filtre à implémenter pour un affichage dans le composant Main ( séparer dans un autre fichier la logique et la reprendre dans Main et NavBar)
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [products, setProducts] = useState([]);
 
+  useEffect(() => {
+      const fetchProducts = async () => {
+          try {
+              const response = await fetch(`${host}:${port}/category/${selectedCategory}`);
+              if (!response.ok) {
+                  console.error('Erreur lors de la récupération des produits par catégorie');
+                  return;
+              }
+              const data = await response.json();
+              setProducts(data);
+          } catch (error) {
+              console.error('Erreur lors de la récupération des produits par catégorie :', error);
+          }
+      };
+
+      if (selectedCategory) {
+          fetchProducts();
+      } else {
+          const fetchAllProducts = async () => {
+              try {
+                  const response = await fetch(`${host}:${port}/products`);
+                  if (!response.ok) {
+                      console.error('Erreur lors de la récupération de tous les produits');
+                      return;
+                  }
+                  const data = await response.json();
+                  setProducts(data);
+              } catch (error) {
+                  console.error('Erreur lors de la récupération de tous les produits :', error);
+              }
+          };
+
+          fetchAllProducts();
+      }
+  }, [selectedCategory]);
   
   return (
     <div className='sm:flex justify-between pt-6 px-10  text-center'>

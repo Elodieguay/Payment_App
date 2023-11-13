@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import {  Navigate, useLocation, useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 const port=import.meta.env.VITE_PORT;
 const host=import.meta.env.VITE_HOST;
@@ -12,7 +12,6 @@ const host=import.meta.env.VITE_HOST;
 export default function Payment({addressData}) {
   
   const navigate = useNavigate()
-  // console.log({addressData});
   const location = useLocation()
   const orderSummary = location?.state?.orderSummary || {};
   const { items, itemCount, total } = orderSummary;
@@ -21,11 +20,35 @@ export default function Payment({addressData}) {
   
   // console.log({formData});
   
+  const [paymentFormData, setPaymentFormData] = useState({
+    cardName: '',
+    cardNumber: '',
+    expDate: '',
+    cvv: '',
+  });
+
+  const [paymentFormValid, setPaymentFormValid] = useState(false);
+
+  useEffect(()=>{
+    const fieldsRequired = ['cardName', 'cardNumber', 'expDate', 'cvv']
+    const paymentFormValid = fieldsRequired.every((field) => paymentFormData[field].trim() !== '')
+    setPaymentFormValid(paymentFormValid)
+  },[paymentFormData])
+  
+  const handleInputChange = (event) => {
+    const { id, value } = event.target;
+    setPaymentFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+  
   const paymentCheckout = async () => {
     const checkoutData = {
       items: items,
       total: total,
       addressData: formData,
+      cardData: paymentFormData
     };
     // console.log('Data_request:',checkoutData);
     try {
@@ -47,7 +70,7 @@ export default function Payment({addressData}) {
 
       await emptyCart();
       navigate("/")
-    } catch (error) {
+      } catch (error) {
       console.error('Erreur lors de la requête POST pour le paiement :', error);
     }
   };
@@ -70,9 +93,6 @@ export default function Payment({addressData}) {
     }
   };
 
-  
-
-
   return (
     <>
     <section className='px-10'>
@@ -82,9 +102,8 @@ export default function Payment({addressData}) {
       <div >
         <h1 className='underline text-base  font-semibold mt-6'>Récapitulatif de la commande:</h1>
         <p className='text-base mt-4'>Nombre d'articles: {itemCount} </p>
-
         <div className='sm:text-sm text-xs'>
-      {items && items.length > 0 ? (
+          {items && items.length > 0 ? (
             <>
               {items.map((el) => (
                 <div key={el.id} className="mt-1  border-b border-gray-400 pt-8 ">
@@ -101,15 +120,13 @@ export default function Payment({addressData}) {
                     </div>
                   </li>
                 </ul>
-              </div>
-         
+                </div>       
               ))}
             </>
           ) : (
             <p>Aucun article dans la commande.</p>
           )}
-        {/* <p className='sm:text-lg text-sm font-bold  my-2' >Total à payer: {total}€</p> */}
-      </div>
+        </div>
       </div>
       <div className=' underline text-base  mt-6 font-semibold '>
         Adresse de livraison
@@ -139,6 +156,8 @@ export default function Payment({addressData}) {
             fullWidth
             autoComplete="cc-name"
             variant="standard"
+            value={paymentFormData.cardName}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -149,6 +168,8 @@ export default function Payment({addressData}) {
             fullWidth
             autoComplete="cc-number"
             variant="standard"
+            value={paymentFormData.cardNumber}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -159,6 +180,8 @@ export default function Payment({addressData}) {
             fullWidth
             autoComplete="cc-exp"
             variant="standard"
+            value={paymentFormData.expDate}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -170,10 +193,14 @@ export default function Payment({addressData}) {
             fullWidth
             autoComplete="cc-csc"
             variant="standard"
+            value={paymentFormData.cvv}
+            onChange={handleInputChange}
           />
         </Grid>
         <button
-        className="block rounded bg-[#7AB8BF] w-full px-5 py-3 text-lg mx-6 text-white transition hover:bg-gray-600"
+        className={`block rounded bg-[#7AB8BF] w-full px-5 py-3 text-lg mx-6 text-white transition hover:bg-gray-600 ${
+          paymentFormValid ? '' : 'pointer-events-none opacity-50'
+        }`}
         onClick={paymentCheckout}
         > Payer {total}€ </button>            
         <Grid item xs={12}>

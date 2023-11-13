@@ -16,7 +16,7 @@ const createOrder = async (req, res) => {
           });
         });
   
-        // 1. Ajouter l'adresse dans la table "Address"
+        //Ajout de l'adresse dans la table "address"
         const firstAddress = Array.isArray(addressData) ? addressData[0] : addressData;
         const addressValues = [
             firstAddress.firstName,
@@ -42,7 +42,7 @@ const createOrder = async (req, res) => {
         });
         const addressId = addressResult.insertId;
   
-        // 2. Ajouter la commande dans la table "Orders"
+        // Ajout de la commande dans la table "order"
         const orderQuery = 'INSERT INTO orders (total, addressId) VALUES (?, ?) ';
         const orderValues = [total, addressId];
         const orderResult = await new Promise((resolve, reject) => {
@@ -56,7 +56,7 @@ const createOrder = async (req, res) => {
         });
         const orderId = orderResult.insertId;
   
-        // 3. Ajouter chaque article dans la table "OrderItems"
+        // Ajout de chaque article dans la table "orderItems"
         for (const item of items) {
           const orderItemsQuery = 'INSERT INTO orderitems (orderId, productId, quantity, unit_price) VALUES (?, ?, ?, ?)';
           const orderItemsValues = [orderId, item.productId, item.quantity, item.unitPrice];
@@ -70,7 +70,7 @@ const createOrder = async (req, res) => {
             });
           });
   
-          // 4. Mettre à jour la quantité disponible dans la table "Products"
+          // Mise à jour de la quantité disponible dans la table "products"
           const updateProductQuery = 'UPDATE products SET inventory = inventory - ? WHERE id = ?';
           const updateProductValues = [item.quantity, item.productId];
           await new Promise((resolve, reject) => {
@@ -84,7 +84,7 @@ const createOrder = async (req, res) => {
           });
         }
   
-        // Validez la transaction
+        // Validation de la commande
         await new Promise((resolve, reject) => {
           connect.query('COMMIT', (error) => {
             if (error) {
@@ -94,10 +94,9 @@ const createOrder = async (req, res) => {
             }
           });
         });
-  
         res.status(201).json({ message: 'Commande créée avec succès' });
       } catch (error) {
-        // En cas d'erreur, annuler la transaction
+        // En cas d'erreur, annuler la commande
         await new Promise((resolve, reject) => {
           connect.query('ROLLBACK', (rollbackError) => {
             if (rollbackError) {
@@ -132,7 +131,7 @@ const createOrder = async (req, res) => {
       res.status(200).json({ message: 'Panier vidé avec succès' });
     } catch (error) {
       console.error('Erreur lors de la suppression du panier :', error);
-      res.status(500).json({ error: 'Erreur serveur lors de la suppression du panier' });
+      res.status(500).json({ error: 'Erreur lors de la suppression du panier' });
     }
   };
 

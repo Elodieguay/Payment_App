@@ -24,14 +24,14 @@ const Main = () => {
   
     
   return (
-    <div className=" flex flex-wrap  gap-6 p-10  justify-between ">
-    {data ? (
-      data.map((item) => <Cards key={item.id} datas={item} />)
+    <div className=" sm:h-screen flex flex-wrap  gap-6 p-10  justify-between ">
+      {data ? (
+        data.map((item) => <Cards key={item.id} datas={item} />)
 
-      ) : (
-        <p>Nous rencontrons actuellement un problème technique</p>
+        ) : (
+          <p>Nous rencontrons actuellement un problème technique</p>
       )}
-  </div>
+    </div>
   )
 }
 
