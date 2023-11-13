@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {PiShoppingBagThin} from 'react-icons/pi'
-// import { panierContext } from '../../App';
-// import { useContext,  } from 'react';
+
 
 
 const Navbar = () =>{

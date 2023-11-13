@@ -32,7 +32,7 @@ export default function AddressForm({adressFormSubmit}) {
     adressFormSubmit(formData)
     
   }
-  console.log(formSubmitPayment);
+  // console.log(formSubmitPayment);
 
   return (
     <>
@@ -135,7 +135,7 @@ export default function AddressForm({adressFormSubmit}) {
         <Button 
         onClick={formSubmitPayment}
         textButton='Enregistrer' 
-        classbutton='block rounded bg-[#7AB8BF] w-full px-5 py-3 text-lg mx-6 text-white transition hover:bg-gray-600' />
+        classbutton='block rounded bg-[#F28585] w-full px-5 py-3 sm:text-lg mx-6 text-white transition hover:bg-gray-600 mt-4 text-center' />
         <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox color="secondary" name="saveAddress" value="yes" />}

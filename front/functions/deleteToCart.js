@@ -2,7 +2,6 @@ const port=import.meta.env.VITE_PORT;
 const host=import.meta.env.VITE_HOST;
 
 const deleteToCart= async (cartId) => {
-    console.log(cartId);
     try {
       const response = await fetch(`${host}:${port}/remove/${cartId}`, {
         method: "DELETE",

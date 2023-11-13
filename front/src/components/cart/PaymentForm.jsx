@@ -4,43 +4,115 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { useLocation } from 'react-router';
+import {  Navigate, useLocation, useNavigate } from 'react-router';
+
+const port=import.meta.env.VITE_PORT;
+const host=import.meta.env.VITE_HOST;
 
 export default function Payment({addressData}) {
-
+  
+  const navigate = useNavigate()
+  // console.log({addressData});
   const location = useLocation()
   const orderSummary = location?.state?.orderSummary || {};
   const { items, itemCount, total } = orderSummary;
-  console.log({itemCount, total});
   
-  // const adressFormSubmit = location?.state.adressFormSubmit || {};
-  // console.log(adressFormSubmit);
   const formData = addressData.length > 0 ? addressData[0] : {}
   
-  console.log({formData});
+  // console.log({formData});
+  
+  const paymentCheckout = async () => {
+    const checkoutData = {
+      items: items,
+      total: total,
+      addressData: formData,
+    };
+    // console.log('Data_request:',checkoutData);
+    try {
+      const response = await fetch(`${host}:${port}/order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(checkoutData),
+      });
+
+      if (!response.ok) {
+        console.error('Erreur lors de la requête POST pour le paiement');
+        return;
+      }
+
+      const responseData = await response.json();
+      // console.log('Réponse du serveur après le paiement :', responseData);
+
+      await emptyCart();
+      navigate("/")
+    } catch (error) {
+      console.error('Erreur lors de la requête POST pour le paiement :', error);
+    }
+  };
+  
+  // Requête pour vider le panier
+  const emptyCart = async () => {
+    try {
+      const response = await fetch(`${host}:${port}/deletecart`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        console.error('Erreur lors de la requête POST pour vider le panier');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la requête POST pour vider le panier :', error);
+    }
+  };
+
+  
+
+
   return (
     <>
     <section className='px-10'>
       <Typography variant="h6" gutterBottom>
         Paiement
       </Typography>      
-      <div >récapitulatif de la commande:
+      <div >
+        <h1 className='underline text-base  font-semibold mt-6'>Récapitulatif de la commande:</h1>
+        <p className='text-base mt-4'>Nombre d'articles: {itemCount} </p>
+
         <div className='sm:text-sm text-xs'>
       {items && items.length > 0 ? (
             <>
               {items.map((el) => (
-                <p key={el.id}>{el.quantity}{el.name}</p>
+                <div key={el.id} className="mt-1  border-b border-gray-400 pt-8 ">
+                <ul className="space-y-4">
+                  <li className="flex items-center gap-4 ">
+                    <div>
+                      <h3 className="  text-sm sm:text-base  text-gray-900">{el.name}</h3>
+                    </div>
+                    <div className='flex items-center max-sm:text-sm max-sm:px-5'>
+                      <p>{el.quantity}</p>
+                    </div>
+                    <div className="flex flex-1 items-center justify-end gap-2 font-medium sm:text-base text-sm">
+                      <p>{el.price}€</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+         
               ))}
             </>
           ) : (
             <p>Aucun article dans la commande.</p>
           )}
-        <p className=''>Nombre d'articles: {itemCount} </p>
-        <p>Total global: {total}€</p>
+        {/* <p className='sm:text-lg text-sm font-bold  my-2' >Total à payer: {total}€</p> */}
       </div>
       </div>
-      <div>
-        ADDRESS SUMMARY
+      <div className=' underline text-base  mt-6 font-semibold '>
+        Adresse de livraison
         <div>
             <div>
             {formData ? (
@@ -102,7 +174,8 @@ export default function Payment({addressData}) {
         </Grid>
         <button
         className="block rounded bg-[#7AB8BF] w-full px-5 py-3 text-lg mx-6 text-white transition hover:bg-gray-600"
-        > COMMANDER </button>            
+        onClick={paymentCheckout}
+        > Payer {total}€ </button>            
         <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox color="secondary" name="saveCard" value="yes" />}

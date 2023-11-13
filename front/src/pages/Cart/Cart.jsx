@@ -55,7 +55,7 @@ const Cart = () => {
       console.log("cart de setCartItem:", setCartItems );
     // mise à jour de la quantité dans la base de données
 
-    const url = `http://localhost:3000/updatequantity/${itemId}?type=${type}`;
+    const url = `${host}:${port}/updatequantity/${itemId}?type=${type}`;
     
     console.log("handleQuantityID:",itemId);
      const response = await fetch(url, {
@@ -86,7 +86,7 @@ const Cart = () => {
   };
   
   return (
-    <section>
+    <section className='min-h-screen  '>
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <header className="text-center">

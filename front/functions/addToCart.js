@@ -17,7 +17,7 @@ const addToCart = async (id) => {
         if (existingItem) {
             
             // Mise à jour de la quantité dans la table cart
-            const url = `http://localhost:3000/updatequantity/${existingItem.id}?type=inc`;
+            const url = `${host}:${port}/updatequantity/${existingItem.id}?type=inc`;
             await fetch(url, {
                 method: 'PUT',
             });
@@ -27,15 +27,14 @@ const addToCart = async (id) => {
             console.log("setCartItems:", setCartItems);
         
         } else {
-            // Sinon, ajoutez l'article au panier
             const dataToSend = {
                 productId: id,
             };
 
        
-        console.log("request data :",dataToSend);
+        // console.log("request data :",dataToSend);
         
-        const url = 'http://localhost:3000/addcart'
+        const url = `${host}:${port}/addcart`
         console.log("request url:",url);
         
         const response = await fetch(url , {
@@ -50,8 +49,8 @@ const addToCart = async (id) => {
         }
 
         let data = await response.json();
-        alert("Item added to cart");
-        console.log(data);
+        // alert("Item added to cart");
+        // console.log(data);
         
         }
       } catch (err) {

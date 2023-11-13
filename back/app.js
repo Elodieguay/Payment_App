@@ -1,12 +1,11 @@
 const express=require('express')
 const app = express()
 const cors = require('cors');
-// const bodyParser = require('body-parser');
 const home = require('./routes/home.routes.js')
 const cart = require('./routes/cart.routes.js')
+const order = require('./routes/order.routes.js')
 
 app.use(cors());
-// app.use(bodyParser.json());
 app.use(express.json())
 
 app.use((req, res, next) => {
@@ -16,8 +15,8 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use('/',home)
 app.use('/',cart)
+app.use('/',order)
 
 module.exports = app
