@@ -92,7 +92,7 @@ cp .env.example .env
 <br>
 
 1) I did not succeed to  put a condition if quantity=0 => it is not possible to add the article.
-2) I did not have time to create filter in order to search articles
+2) I did not have time to create filter in order to search articles. See comment in NavBar
 3) I did not create user authentification
 4) I would like to create a modal to thanks user for the order
 </div>
